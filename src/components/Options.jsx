@@ -4,6 +4,11 @@ function Options({ options, handleAnswerSelect }) {
   const optionItems = options.map((option, index) => (
     <option key={index}>{option}</option>
   ));
+  optionItems.unshift(
+    <option key="-1" value="">
+      --Please choose an option--
+    </option>
+  );
 
   const [selectedItem, setSelectedItem] = useState(0);
 
