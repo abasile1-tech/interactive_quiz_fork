@@ -19,11 +19,15 @@ function QuizContainer() {
   let options;
   if (questions.length > 0) {
     question = questions[currentQuestionIndex];
-    options = ["--Please choose an option--", ...question.incorrect_answers];
+    options = [
+      "--Please choose an option--",
+      ...question.incorrect_answers,
+      question.correct_answer,
+    ];
   }
 
   const handleAnswerSelect = (selectedAnswer) => {
-    const question_answer = question.answer;
+    const question_answer = question.correct_answer;
     if (selectedAnswer == question_answer) {
       setScore(score + 1);
     }
