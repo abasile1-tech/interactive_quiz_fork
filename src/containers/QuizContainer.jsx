@@ -26,7 +26,7 @@ function QuizContainer() {
   ]);
 
   const question = questions[currentQuestionIndex];
-  const options = question["options"];
+  const options = ["--Please choose an option--", ...question["options"]];
 
   const handleAnswerSelect = (selectedAnswer) => {
     const question_answer = question.answer;
