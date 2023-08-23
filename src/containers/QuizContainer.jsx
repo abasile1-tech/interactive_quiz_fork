@@ -5,31 +5,30 @@ import { useEffect } from "react";
 function QuizContainer() {
   const [currentQuestionIndex, setCurrentQUestionIndex] = useState(0);
   const [score, setScore] = useState(0);
-  const [loading, setLoading] = useState(true);
 
-  const [questions, setQuestions] = useState([
-    {
-      question:
-        "What was the name of the first computer virus that spread in the wild?",
-      options: ["Creeper", "ILOVEYOU", "Melissa", "Brain"],
-      answer: "Brain",
-    },
-    {
-      question:
-        "Which programming language is often referred to as the 'mother of all languages'?",
-      options: ["Java", "C", "Fortran", "Assembly"],
-      answer: "C",
-    },
-    {
-      question: "In what year was the company Google founded?",
-      options: ["1996", "1998", "2000", "2004"],
-      answer: "1998",
-    },
-  ]);
+  // const [questions, setQuestions] = useState([
+  //   {
+  //     question:
+  //       "What was the name of the first computer virus that spread in the wild?",
+  //     options: ["Creeper", "ILOVEYOU", "Melissa", "Brain"],
+  //     answer: "Brain",
+  //   },
+  //   {
+  //     question:
+  //       "Which programming language is often referred to as the 'mother of all languages'?",
+  //     options: ["Java", "C", "Fortran", "Assembly"],
+  //     answer: "C",
+  //   },
+  //   {
+  //     question: "In what year was the company Google founded?",
+  //     options: ["1996", "1998", "2000", "2004"],
+  //     answer: "1998",
+  //   },
+  // ]);
 
-  const [newQuestions, setNewQuestions] = useState([]);
+  // const [newQuestions, setNewQuestions] = useState([]);
 
-  // const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=10")
@@ -37,36 +36,32 @@ function QuizContainer() {
       .then((data) => {
         //console.log("data", data);
         console.log("data.results", data.results);
-        // setQuestions(data.results);
-        setNewQuestions(data.results);
+        setQuestions(data.results);
+        // setNewQuestions(data.results);
       });
     //console.log("response:", response);
-    setLoading(false);
   }, []);
 
-  let newQuestion;
+  // let newQuestion;
   let incorrect_answers;
   let question;
   let options;
-  if (newQuestions.length > 0) {
+  if (questions.length > 0) {
     console.log("we are in the loop !!!!!!");
     console.log("questions:", questions);
-    console.log("newQuestions: ", newQuestions);
+    // console.log("newQuestions: ", newQuestions);
 
-    newQuestion = newQuestions[currentQuestionIndex];
-    console.log("newQuestion: ", newQuestion);
+    // newQuestion = newQuestions[currentQuestionIndex];
+    // console.log("newQuestion: ", newQuestion);
 
-    incorrect_answers = newQuestion["incorrect_answers"];
-    console.log("incorrect_answers: ", incorrect_answers);
-    const difficulty = newQuestion.difficulty;
-    console.log("difficulty: ", difficulty);
+    // incorrect_answers = newQuestion["incorrect_answers"];
+    // console.log("incorrect_answers: ", incorrect_answers);
+    // const difficulty = newQuestion.difficulty;
+    // console.log("difficulty: ", difficulty);
     question = questions[currentQuestionIndex];
     console.log("question:", question);
-    options = ["--Please choose an option--", ...question["options"]];
-    // const options = [
-    //   "--Please choose an option--",
-    //   ...question.incorrect_answers,
-    // ];
+    // options = ["--Please choose an option--", ...question["options"]];
+    options = ["--Please choose an option--", ...question.incorrect_answers];
   }
 
   const handleAnswerSelect = (selectedAnswer) => {
@@ -83,12 +78,10 @@ function QuizContainer() {
     }
   };
 
-  //return <h1>loading</h1>;
-
   return (
     <>
       <h1>Use Effect Lesson</h1>
-      {newQuestions.length == 0 ? (
+      {questions.length == 0 ? (
         <h1>Loading</h1>
       ) : (
         <>
