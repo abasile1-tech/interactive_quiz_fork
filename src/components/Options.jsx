@@ -1,7 +1,9 @@
 import { useState } from "react";
 
 function Options({ options, handleAnswerSelect }) {
-  const optionItems = options.map((option, index) => <option>{option}</option>);
+  const optionItems = options.map((option, index) => (
+    <option key={index}>{option}</option>
+  ));
 
   const [selectedItem, setSelectedItem] = useState(0);
 
