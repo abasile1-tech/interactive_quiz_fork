@@ -1,9 +1,11 @@
 import Question from "../components/Question";
 import { useState } from "react";
+import { useEffect } from "react";
 
 function QuizContainer() {
   const [currentQuestionIndex, setCurrentQUestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const [questions, setQuestions] = useState([
     {
@@ -25,8 +27,47 @@ function QuizContainer() {
     },
   ]);
 
-  const question = questions[currentQuestionIndex];
-  const options = ["--Please choose an option--", ...question["options"]];
+  const [newQuestions, setNewQuestions] = useState([]);
+
+  // const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    fetch("https://opentdb.com/api.php?amount=10")
+      .then((res) => res.json())
+      .then((data) => {
+        //console.log("data", data);
+        console.log("data.results", data.results);
+        // setQuestions(data.results);
+        setNewQuestions(data.results);
+      });
+    //console.log("response:", response);
+    setLoading(false);
+  }, []);
+
+  let newQuestion;
+  let incorrect_answers;
+  let question;
+  let options;
+  if (newQuestions.length > 0) {
+    console.log("we are in the loop !!!!!!");
+    console.log("questions:", questions);
+    console.log("newQuestions: ", newQuestions);
+
+    newQuestion = newQuestions[currentQuestionIndex];
+    console.log("newQuestion: ", newQuestion);
+
+    incorrect_answers = newQuestion["incorrect_answers"];
+    console.log("incorrect_answers: ", incorrect_answers);
+    const difficulty = newQuestion.difficulty;
+    console.log("difficulty: ", difficulty);
+    question = questions[currentQuestionIndex];
+    console.log("question:", question);
+    options = ["--Please choose an option--", ...question["options"]];
+    // const options = [
+    //   "--Please choose an option--",
+    //   ...question.incorrect_answers,
+    // ];
+  }
 
   const handleAnswerSelect = (selectedAnswer) => {
     const question_answer = question.answer;
@@ -42,14 +83,23 @@ function QuizContainer() {
     }
   };
 
+  //return <h1>loading</h1>;
+
   return (
     <>
-      <h1>Score: {score}</h1>
-      <Question
-        question={question}
-        options={options}
-        handleAnswerSelect={handleAnswerSelect}
-      />
+      <h1>Use Effect Lesson</h1>
+      {newQuestions.length == 0 ? (
+        <h1>Loading</h1>
+      ) : (
+        <>
+          <h1>Score: {score}</h1>
+          <Question
+            question={question}
+            options={options}
+            handleAnswerSelect={handleAnswerSelect}
+          />
+        </>
+      )}
     </>
   );
 }
