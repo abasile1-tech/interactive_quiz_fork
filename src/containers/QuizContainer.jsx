@@ -1,35 +1,33 @@
 import Question from "../components/Question";
 import { useState } from "react";
+import { useEffect } from "react";
 
 function QuizContainer() {
   const [currentQuestionIndex, setCurrentQUestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [questions, setQuestions] = useState([]);
 
-  const [questions, setQuestions] = useState([
-    {
-      question:
-        "What was the name of the first computer virus that spread in the wild?",
-      options: ["Creeper", "ILOVEYOU", "Melissa", "Brain"],
-      answer: "Brain",
-    },
-    {
-      question:
-        "Which programming language is often referred to as the 'mother of all languages'?",
-      options: ["Java", "C", "Fortran", "Assembly"],
-      answer: "C",
-    },
-    {
-      question: "In what year was the company Google founded?",
-      options: ["1996", "1998", "2000", "2004"],
-      answer: "1998",
-    },
-  ]);
+  useEffect(() => {
+    fetch("https://opentdb.com/api.php?amount=10")
+      .then((res) => res.json())
+      .then((data) => {
+        setQuestions(data.results);
+      });
+  }, []);
 
-  const question = questions[currentQuestionIndex];
-  const options = ["--Please choose an option--", ...question["options"]];
+  let question;
+  let options;
+  if (questions.length > 0) {
+    question = questions[currentQuestionIndex];
+    options = [
+      "--Please choose an option--",
+      ...question.incorrect_answers,
+      question.correct_answer,
+    ];
+  }
 
   const handleAnswerSelect = (selectedAnswer) => {
-    const question_answer = question.answer;
+    const question_answer = question.correct_answer;
     if (selectedAnswer == question_answer) {
       setScore(score + 1);
     }
@@ -44,12 +42,19 @@ function QuizContainer() {
 
   return (
     <>
-      <h1>Score: {score}</h1>
-      <Question
-        question={question}
-        options={options}
-        handleAnswerSelect={handleAnswerSelect}
-      />
+      <h1>Use Effect Lesson</h1>
+      {questions.length == 0 ? (
+        <h1>Loading</h1>
+      ) : (
+        <>
+          <h1>Score: {score}</h1>
+          <Question
+            question={question}
+            options={options}
+            handleAnswerSelect={handleAnswerSelect}
+          />
+        </>
+      )}
     </>
   );
 }
